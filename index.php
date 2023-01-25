@@ -20,7 +20,6 @@ require "includes/config.php";
 </head>
 
 <body>
-
   <div id="wrapper">
 
     <?php include "includes/header.php"; ?>
@@ -30,15 +29,13 @@ require "includes/config.php";
         <div class="row">
           <section class="content__left col-md-8">
             <div class="block">
-              <a href="#">Все записи</a>
+              <a href="/posts.php">Все записи</a>
               <h3>Новейшее_в_блоге</h3>
               <div class="block__content">
                 <div class="articles articles__horizontal">
 
                   <?php
-                  $posts = mysqli_query($connection, "SELECT * FROM `posts`");
-                  ?>
-                  <?php
+                  $posts = mysqli_query($connection, "SELECT * FROM `posts` ORDER BY 'id' DESC LIMIT 10");
                   while ($post = mysqli_fetch_assoc($posts)) {
                   ?>
                     <article class="article">
@@ -46,69 +43,60 @@ require "includes/config.php";
                       <div class="article__info">
                         <a href="/post.php?id=<?php echo $post['id'] ?>"><?php echo $post['title'] ?></a>
                         <div class="article__info__meta">
-                          <small>Категория: <a href="#">Программирование></a></small>
+                          <?php
+                          $post_cat = false;
+                          foreach ($categories as $cat) {
+                            if ($cat['id'] == $post['categories_id']) {
+                              $post_cat = $cat;
+                              break;
+                            }
+                          }
+                          ?>
+                          <small>Категория: <a href="/post.php?category=<?php echo $post_cat['id'] ?>"><?php echo $post_cat['title'] ?></a></small>
                         </div>
-                        <div class="article__info__preview"><?php echo $post['text'] ?></div>
+                        <div class="article__info__preview"><?php echo mb_substr(strip_tags($post['text']), 0, 90, 'utf-8') . ' ...' ?></div>
                       </div>
                     </article>
                   <?php
                   }
                   ?>
 
-
                 </div>
               </div>
             </div>
 
             <div class="block">
-              <a href="#">Все записи</a>
+              <a href="/post.php?category=7">Все записи</a>
               <h3>Безопасность [Новейшее]</h3>
               <div class="block__content">
                 <div class="articles articles__horizontal">
 
-                  <article class="article">
-                    <div class="article__image"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Программирование</a></small>
+                  <?php
+                  $posts = mysqli_query($connection, "SELECT * FROM `posts` WHERE `categories_id` = 10 ORDER BY 'id' DESC LIMIT 10");
+                  while ($post = mysqli_fetch_assoc($posts)) {
+                  ?>
+                    <article class="article">
+                      <div class="article__image" style="background-image: url(/media/images/<?php echo $post['image'] ?>);"></div>
+                      <div class="article__info">
+                        <a href="/post.php?id=<?php echo $post['id'] ?>"><?php echo $post['title'] ?></a>
+                        <div class="article__info__meta">
+                          <?php
+                          $post_cat = false;
+                          foreach ($categories as $cat) {
+                            if ($cat['id'] == $post['categories_id']) {
+                              $post_cat = $cat;
+                              break;
+                            }
+                          }
+                          ?>
+                          <small>Категория: <a href="/post.php?category=<?php echo $post_cat['id'] ?>"><?php echo $post_cat['title'] ?></a></small>
+                        </div>
+                        <div class="article__info__preview"><?php echo mb_substr(strip_tags($post['text']), 0, 90, 'utf-8') . ' ...' ?></div>
                       </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи #2</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Lifestyle</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи #3</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Программирование</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи #4</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Lifestyle</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
+                    </article>
+                  <?php
+                  }
+                  ?>
 
                 </div>
               </div>
@@ -120,212 +108,52 @@ require "includes/config.php";
               <div class="block__content">
                 <div class="articles articles__horizontal">
 
-                  <article class="article">
-                    <div class="article__image"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Программирование</a></small>
+                  <?php
+                  $posts = mysqli_query($connection, "SELECT * FROM `posts` WHERE `categories_id` = 7 ORDER BY 'id' DESC LIMIT 10");
+                  while ($post = mysqli_fetch_assoc($posts)) {
+                  ?>
+                    <article class="article">
+                      <div class="article__image" style="background-image: url(/media/images/<?php echo $post['image'] ?>);"></div>
+                      <div class="article__info">
+                        <a href="/post.php?id=<?php echo $post['id'] ?>"><?php echo $post['title'] ?></a>
+                        <div class="article__info__meta">
+                          <?php
+                          $post_cat = false;
+                          foreach ($categories as $cat) {
+                            if ($cat['id'] == $post['categories_id']) {
+                              $post_cat = $cat;
+                              break;
+                            }
+                          }
+                          ?>
+                          <small>Категория: <a href="/post.php?category=<?php echo $post_cat['id'] ?>"><?php echo $post_cat['title'] ?></a></small>
+                        </div>
+                        <div class="article__info__preview"><?php echo mb_substr(strip_tags($post['text']), 0, 90, 'utf-8') . ' ...' ?></div>
                       </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи #2</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Lifestyle</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи #3</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Программирование</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи #4</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Lifestyle</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
+                    </article>
+                  <?php
+                  }
+                  ?>
 
                 </div>
               </div>
             </div>
           </section>
           <section class="content__right col-md-4">
-            <div class="block">
-              <h3>Мы_знаем</h3>
-              <div class="block__content">
-                <script type="text/javascript" src="//ra.revolvermaps.com/0/0/6.js?i=02op3nb0crr&amp;m=7&amp;s=320&amp;c=e63100&amp;cr1=ffffff&amp;f=arial&amp;l=0&amp;bv=90&amp;lx=-420&amp;ly=420&amp;hi=20&amp;he=7&amp;hc=a8ddff&amp;rs=80" async="async"></script>
-              </div>
-            </div>
 
-            <div class="block">
-              <h3>Топ читаемых статей</h3>
-              <div class="block__content">
-                <div class="articles articles__vertical">
+            <?php include "includes/sidebar.php" ?>
 
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Программирование</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
 
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Программирование</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Программирование</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Программирование</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Название статьи</a>
-                      <div class="article__info__meta">
-                        <small>Категория: <a href="#">Программирование</a></small>
-                      </div>
-                      <div class="article__info__preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ...</div>
-                    </div>
-                  </article>
-
-                </div>
-              </div>
-            </div>
-
-            <div class="block">
-              <h3>Комментарии</h3>
-              <div class="block__content">
-                <div class="articles articles__vertical">
-
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Jonny Flame</a>
-                      <div class="article__info__meta">
-                        <small><a href="#">Название статьи #1</a></small>
-                      </div>
-                      <div class="article__info__preview">Бла бла бла бла бла бла бла, и думаю еще что бла бла бла бла бла бла бла ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Jonny Flame</a>
-                      <div class="article__info__meta">
-                        <small><a href="#">Название статьи #1</a></small>
-                      </div>
-                      <div class="article__info__preview">Бла бла бла бла бла бла бла, и думаю еще что бла бла бла бла бла бла бла ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Jonny Flame</a>
-                      <div class="article__info__meta">
-                        <small><a href="#">Название статьи #1</a></small>
-                      </div>
-                      <div class="article__info__preview">Бла бла бла бла бла бла бла, и думаю еще что бла бла бла бла бла бла бла ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Jonny Flame</a>
-                      <div class="article__info__meta">
-                        <small><a href="#">Название статьи #1</a></small>
-                      </div>
-                      <div class="article__info__preview">Бла бла бла бла бла бла бла, и думаю еще что бла бла бла бла бла бла бла ...</div>
-                    </div>
-                  </article>
-
-                  <article class="article">
-                    <div class="article__image" style="background-image: url(/media/images/post-image.jpg);"></div>
-                    <div class="article__info">
-                      <a href="#">Jonny Flame</a>
-                      <div class="article__info__meta">
-                        <small><a href="#">Название статьи #1</a></small>
-                      </div>
-                      <div class="article__info__preview">Бла бла бла бла бла бла бла, и думаю еще что бла бла бла бла бла бла бла ...</div>
-                    </div>
-                  </article>
-
-                </div>
-              </div>
-            </div>
           </section>
         </div>
       </div>
     </div>
 
-    <footer id="footer">
-      <div class="container">
-        <div class="footer__logo">
-          <h1><?php echo $config['title'] ?></h1>
-        </div>
-        <nav class="footer__menu">
-          <ul>
-            <li><a href="#">Главная</a></li>
-            <li><a href="#">Обо мне</a></li>
-            <li><a href="#">Я Вконтакте</a></li>
-            <li><a href="#">Правообладателям</a></li>
-          </ul>
-        </nav>
-      </div>
-    </footer>
+    <?php
+    include 'includes/footer.php'
+    ?>
 
   </div>
-
 </body>
 
 </html>
